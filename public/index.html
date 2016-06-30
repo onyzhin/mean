@@ -47,6 +47,9 @@
 				<div class="checkbox" ng-repeat="project in projects">
 					<label>
 						<input type="checkbox" ng-click="deleteProject(project._id)"> {{ project.title }} 
+						<ul>
+							<li ng-repeat="task in project.tasks">{{ task }}</li>
+						</ul>
 					</label>
 				</div>
 
@@ -93,18 +96,21 @@
 			</div>
 		</div>
 		<div  ng-repeat="task in tasks">
-			<label>
-				{{ task.description }}
-			</label>
-			<label>
-				{{ task.priority }}
-			</label>
-			<label>
-				{{ task.timePlaning }}
-			</label>
-			<label ng-init="findProject(task.project)">
-				{{ }}  
-			</label>
+			<div>
+				<label>
+					{{ task.description }}
+				</label>
+				<label>
+					{{ task.priority }}
+				</label>
+				<label>
+					{{ task.timePlaning }}
+				</label>
+				<label>
+					{{ task._id }}
+				</label>
+				<span ng-click="deleteTask(task._id)">delete</span>
+			</div>
 		</div>
 
 		<div class="text-center text-muted">

@@ -11,9 +11,9 @@ var TaskSchema = new Schema({
 	finish      : { type: Date, default: Date.now },
 	completion  : { type: Number, min: 0, max: 100 },
 	complete    : { type: Boolean, default: false},
-	project      : { type: Schema.ObjectId, ref: 'Project' },
 	author      : { type: Schema.ObjectId, ref: 'Person' },
-	developer   : { type: Schema.ObjectId, ref: 'Person' }
+	developer   : { type: Schema.ObjectId, ref: 'Person' },
+	project 	: { type: Schema.ObjectId, ref: 'Project'}
 });
 
 module.exports = mongoose.model('Task', TaskSchema);

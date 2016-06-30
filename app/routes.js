@@ -1,99 +1,143 @@
 var Project = require('./models/project');
 var Task = require('./models/task');
 var Person = require('./models/person');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 function getProject(res) {
     Project.find(function (err, projects) {
 
-        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
         if (err) {
             res.send(err);
         }
 
-        res.json(projects); // return all todos in JSON format
+        /*Project
+        .findOne({ _id: req.body.projectID })
+        .populate('tasks')
+        .exec ( function (err, project) {
+            if (err)
+                res.send(err);
+
+            console.log(project);
+        }); */
+
+        res.json(projects); 
     }); 
 };
 
 function getTask(res) {
     Task.find(function (err, tasks) {
-
-        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+       
         if (err) {
             res.send(err);
         }
 
-        res.json(tasks); // return all todos in JSON format
+        res.json(tasks); 
     });
 };
 
 module.exports = function (app) {
 
     // api ---------------------------------------------------------------------
-    // get all todos
     app.get('/api/projects', function (req, res) {
-        // use mongoose to get all todos in the database
         getProject(res);
     });
     app.get('/api/tasks', function (req, res) {
-        // use mongoose to get all todos in the database
         getTask(res);
     });
 
-    // create todo and send back all todos after creation
     app.post('/api/projects', function (req, res) {
 
-        // create a todo, information comes from AJAX request from Angular
         Project.create({
             title: req.body.title
-        }, function (err, todo) {
+        }, function (err, data) {
             if (err)
                 res.send(err);
 
-            // get and return all the todos after you create another
            getProject(res);
         });
 
     });
-    // create todo and send back all todos after creation
+
+/*
+Project
+            .findOne({ _id: req.body.projectID })
+            .populate('tasks')
+            .exec ( function (err, project) {
+                if (err)
+                    res.send(err);
+
+                console.log(project);
+            })
+*/
+
+
     app.post('/api/tasks', function (req, res) {
 
-        // create a todo, information comes from AJAX request from Angular
         Task.create({
             description: req.body.description,
             priority: req.body.priority,
             timePlaning: req.body.timePlaning,
             project: req.body.projectID
-        }, function (err, todo) {
-            if (err)
-                res.send(err);
+         }, function(err, task) {
 
-            // get and return all the todos after you create another
-           getTask(res);
-        });
+                if (err) {
+                    res.send(err);
+                }
 
+                Project.update({ _id: req.body.projectID },
+                    { $push: { tasks: task._id } },
+                    function (err, data) {
+                        if (err)
+                            res.send(err);
+                        getTask(res);
+                    }
+                );  
+            });
     });
 
     app.post('/api/projects/find/:project_id', function (req, res) {
         
         Project.findById(req.params.project_id, 
         function (err, project) {
-            if (err)
+            if (err) {
                 res.send(err);
+            }
 
             res.json(project);
         });
 
     });
 
-    // delete a todo
     app.delete('/api/projects/:project_id', function (req, res) {
         Project.remove({
             _id: req.params.project_id
-        }, function (err, todo) {
-            if (err)
+        }, function (err, project) {
+            if (err) {
                 res.send(err);
+            }
 
             getProject(res);
+        });
+    });
+
+    app.delete('/api/tasks/:task_id', function (req, res) {
+
+        var task_id = new ObjectId(req.params.task_id);
+
+        Task.remove({
+            _id: req.params.task_id
+        }, function (err, task) {
+            if (err) {
+                res.send(err);
+            };
+            Project.update({ tasks: task_id },                
+                { $pull: { tasks: task_id } },
+                function (err, data) {
+                    if (err)
+                        res.send(err);
+                    getTask(res);
+                }
+            ); 
         });
     });
 
