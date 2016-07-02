@@ -1,6 +1,5 @@
 angular.module('main', [])
 
-	// inject the Todo service factory into our controller
 	.controller('mainController', ['$scope','$http','Project','Task', function($scope, $http, Project, Task) {
 		$scope.project = {};
 		$scope.loading = true;
@@ -50,6 +49,12 @@ angular.module('main', [])
 				.success(function(data) {
 					$scope.task = {}; 
 					$scope.tasks = data; 
+					//upd project
+					Project.get()
+						.success(function(data) {
+							$scope.projects = data; 
+							$scope.loading = false;
+						});
 				});
 		};
 
@@ -70,6 +75,12 @@ angular.module('main', [])
 
 				.success(function(data) {
 					$scope.tasks = data; 
+					//upd project
+					Project.get()
+						.success(function(data) {
+							$scope.projects = data; 
+							$scope.loading = false;
+						});
 				});
 		};
 	}]);
