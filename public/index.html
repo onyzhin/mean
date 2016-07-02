@@ -39,7 +39,7 @@
 
 		<!-- TODO LIST -->
 		<div id="todo-list" class="row">
-			<div class="col-sm-4 col-sm-offset-4">
+			<div class="col-sm-6 col-sm-offset-3">
 
 				
 
@@ -48,7 +48,7 @@
 					<label>
 						<input type="checkbox" ng-click="deleteProject(project._id)"> {{ project.title }} 
 						<ul>
-							<li ng-repeat="task in project.tasks">{{ task }}</li>
+							<li ng-repeat="task in project.tasks">{{ task.description }}</li>
 						</ul>
 					</label>
 				</div>
@@ -107,7 +107,7 @@
 					{{ task.timePlaning }}
 				</label>
 				<label>
-					{{ task._id }}
+					{{ task.project.title }}
 				</label>
 				<span ng-click="deleteTask(task._id)">delete</span>
 			</div>

@@ -4,35 +4,30 @@ var Person = require('./models/person');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 function getProject(res) {
-    Project.find(function (err, projects) {
-
-        if (err) {
-            res.send(err);
-        }
-
-        /*Project
-        .findOne({ _id: req.body.projectID })
+    Project
+        .find()
         .populate('tasks')
         .exec ( function (err, project) {
             if (err)
                 res.send(err);
 
             console.log(project);
-        }); */
-
-        res.json(projects); 
-    }); 
+            res.json(project); 
+        });
+   
 };
 
 function getTask(res) {
-    Task.find(function (err, tasks) {
-       
-        if (err) {
-            res.send(err);
-        }
+    Task
+        .find()
+        .populate('project')
+        .exec ( function (err, task) {
+            if (err)
+                res.send(err);
 
-        res.json(tasks); 
-    });
+            console.log(task);
+            res.json(task); 
+        });
 };
 
 module.exports = function (app) {
@@ -57,19 +52,6 @@ module.exports = function (app) {
         });
 
     });
-
-/*
-Project
-            .findOne({ _id: req.body.projectID })
-            .populate('tasks')
-            .exec ( function (err, project) {
-                if (err)
-                    res.send(err);
-
-                console.log(project);
-            })
-*/
-
 
     app.post('/api/tasks', function (req, res) {
 
