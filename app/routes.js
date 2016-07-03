@@ -5,29 +5,29 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 function getProject(res) {
     Project
-        .find()
-        .populate('tasks')
-        .exec ( function (err, project) {
-            if (err)
-                res.send(err);
+    .find()
+    .populate('tasks')
+    .exec ( function (err, project) {
+        if (err)
+            res.send(err);
 
-            console.log(project);
-            res.json(project); 
-        });
+        console.log(project);
+        res.json(project); 
+    });
    
 };
 
 function getTask(res) {
     Task
-        .find()
-        .populate('project')
-        .exec ( function (err, task) {
-            if (err)
-                res.send(err);
+    .find()
+    .populate('project')
+    .exec ( function (err, task) {
+        if (err)
+            res.send(err);
 
-            console.log(task);
-            res.json(task); 
-        });
+        console.log(task);
+        res.json(task); 
+    });
 };
 
 module.exports = function (app) {
@@ -53,19 +53,19 @@ module.exports = function (app) {
     });
 
     app.post('/api/tasks', function (req, res) {
-
+ 
         Task.create({
             description: req.body.description,
+            details: req.body.details,
             priority: req.body.priority,
-            timePlaning: req.body.timePlaning,
-            project: req.body.projectID
+            project: req.body.projectId
          }, function(err, task) {
 
                 if (err) {
                     res.send(err);
                 }
 
-                Project.update({ _id: req.body.projectID },
+                Project.update({ _id: req.body.projectId },
                     { $push: { tasks: task._id } },
                     function (err, data) {
                         if (err)

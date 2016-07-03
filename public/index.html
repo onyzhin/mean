@@ -1,49 +1,37 @@
 <!doctype html>
-
-<!-- ASSIGN OUR ANGULAR MODULE -->
 <html ng-app="scotchTodo">
 <head>
-	<!-- META -->
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
-
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Node/Angular Todo App</title>
-
-	<!-- SCROLLS -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 	<style>
 		html 					{ overflow-y:scroll; }
 		body 					{ padding-top:50px; }
 		#todo-list 				{ margin-bottom:30px; }
 		#todo-form 	 			{ margin-bottom:50px; }
+		.thumbnail				{ margin-bottom: 25px; }
 	</style>
 
-	<!-- SPELLS -->
-	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script><!-- load angular -->
-
-	<script src="js/controllers/main.js"></script> <!-- load up our controller -->
-	<script src="js/services/project.js"></script> <!-- load our todo service -->
-	<script src="js/services/task.js"></script> <!-- load our todo service -->
-	<script src="js/core.js"></script> <!-- load our main application -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+	<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+	
+	<script src="js/controllers/main.js"></script> 
+	<script src="js/services/project.js"></script> 
+	<script src="js/services/task.js"></script> 
+	<script src="js/directives/dropdown.directive.js"></script> 
+	<script src="js/core.js"></script> 
 
 </head>
-<!-- SET THE CONTROLLER -->
 <body ng-controller="mainController">
 	<div class="container">
-
-		<!-- HEADER AND TODO COUNT -->
 		<div class="jumbotron text-center">
-			<h1>Projects </h1>
+			<h1>Менеджер проектів</h1>
 		</div>
-
-		<!-- TODO LIST -->
 		<div id="todo-list" class="row">
-			<div class="col-sm-6 col-sm-offset-3">
-
-				
-
-				<!-- LOOP OVER THE TODOS IN $scope.projects -->
+			<div class="col-sm-6">
+			
 				<div class="checkbox" ng-repeat="project in projects">
 					<label>
 						<input type="checkbox" ng-click="deleteProject(project._id)"> {{ project.title }} 
@@ -60,63 +48,74 @@
 			</div>
 		</div>
 
-		<!-- FORM TO CREATE TODOS -->
 		<div id="todo-form" class="row">
-			<div class="col-sm-8 col-sm-offset-2 text-center">
+			<div class="col-sm-6">
 				<form>
 					<div class="form-group">
-
-						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-						<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="project.title">
+						<input type="text" class="form-control" placeholder="Назва проекту" ng-model="project.title">
 					</div>
-
-					<!-- createToDo() WILL CREATE NEW TODOS -->
-					<button type="submit" class="btn btn-primary btn-lg" ng-click="createProject()">Add</button>
+					<button type="submit" class="btn btn-success" ng-click="createProject()">Зберегти проект</button>
 				</form>
 			</div>
 		</div>
-		<h2>create task</h2>
-		<div id="task" class="row">
-			<div class="col-sm-8 col-sm-offset-2 text-center">
-				<form>
-					<div class="form-group">
 
-						<!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-						<input type="text" class="form-control input-lg text-center" placeholder="description" ng-model="task.description">
-						<input type="text" class="form-control input-lg text-center" placeholder="priority" ng-model="task.priority">
-						<input type="text" class="form-control input-lg text-center" placeholder="timePlaning" ng-model="task.timePlaning">
-						<select ng-model="task.projectID">
-							<option ng-repeat="project in projects" value="{{project._id}}">{{ project.title }}</option>
-						</select>
+		<hr>
+
+		<h2>Створити задачу</h2>
+		<div id="task">
+			<form>
+				<div class="row">
+					<div class="col-sm-6">					
+						<div class="form-group">
+							<input type="text" class="form-control" placeholder="Назва задачі" ng-model="task.description">
+						</div>					
+						<div class="form-group">	
+							<textarea class="form-control" placeholder="Опис та деталі" ng-model="task.details"></textarea>
+						</div>					
 					</div>
-
-					<!-- createToDo() WILL CREATE NEW TODOS -->
-					<button type="submit" class="btn btn-primary btn-lg" ng-click="createTask()">Add</button>
-				</form>
-			</div>
+					<div class="col-sm-2">					
+						<div class="form-group">					
+						 	<dropdown is-button 
+				                ng-model="task.projectId" 
+				                items="projects" >
+				 			</dropdown>
+						</div>					
+					</div>
+					<div class="col-sm-2">					
+						<div class="form-group">					
+							<input type="number" class="form-control" placeholder="пріоритет" ng-model="task.priority">
+						</div>					
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12 form-group">					
+						<button type="submit" class="btn btn-success" ng-click="createTask()">Створити задачу</button>
+					</div>
+				</div>
+			</form>
 		</div>
-		<div  ng-repeat="task in tasks">
-			<div>
-				<label>
-					{{ task.description }}
-				</label>
-				<label>
-					{{ task.priority }}
-				</label>
-				<label>
-					{{ task.timePlaning }}
-				</label>
-				<label>
-					{{ task.project.title }}
-				</label>
-				<span ng-click="deleteTask(task._id)">delete</span>
+
+		<hr>
+
+		<div class="row">
+  			<div class="col-xs-12 col-md-4" ng-repeat="task in tasks | orderBy  : 'priority' ">
+		 		<div class="thumbnail">
+					<div class="caption">
+						<h4>{{ task.description }} <span class="label label-primary">{{ task.project.title }}</span></h4>
+						<p>Запланований час: {{ task.timePlaning }} год.</p>
+						<p>{{ task.details }}</p>
+						<p class="text-right">
+							<a href="#" class="btn btn-sm btn-success" role="button" ng-click="deleteTask(task._id)">завершити</a>
+							<a href="#" class="btn btn-sm btn-danger" role="button" ng-click="deleteTask(task._id)">видалити</a> 
+						</p>
+					</div>
+			    </div>
 			</div>
 		</div>
 
 		<div class="text-center text-muted">
 			<p>A demo by <a href="https://github.com/onyzhin">onyzhin</a>.</p>
 		</div>
-
 	</div>
 
 </body>

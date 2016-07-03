@@ -6,7 +6,6 @@ var TaskSchema = new Schema({
 	details     : { type: String, default: ""},
 	priority    : { type: Number, min: 0, max: 100 },
 	timePlaning : Number,
-	timeSpent   : Number,
 	starting    : { type: Date, default: Date.now },
 	finish      : { type: Date, default: Date.now },
 	completion  : { type: Number, min: 0, max: 100 },

@@ -1,0 +1,14 @@
+<div class="btn-group" dropdown>
+  <button type="button" 
+    class="btn btn-primary">
+    {{ ngModel.title || default }}
+  </button>
+  <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu"> 
+    <li ng-repeat="item in items">
+      <a href="#" ng-click="select(item)">{{ item.title }}</a>
+    </li> 
+  </ul>  
+</div>

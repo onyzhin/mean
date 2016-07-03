@@ -1,1 +1,1 @@
-angular.module('scotchTodo', ['main', 'taskService', 'projectService']);
+angular.module('scotchTodo', ['main', 'taskService', 'projectService', 'structureService']);
