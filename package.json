@@ -1,9 +1,9 @@
 {
-  "name": "node-todo",
+  "name": "task manager",
   "version": "0.0.1",
-  "description": "Simple todo application.",
+  "description": "Simple task manager",
   "main": "server.js",
-  "author": "Scotch",
+  "author": "node-ist",
   "dependencies": {
     "body-parser": "^1.4.3",
     "express": "^4.13.4",
